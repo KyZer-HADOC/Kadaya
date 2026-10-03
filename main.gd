@@ -455,19 +455,24 @@ func draw_game() -> void:
     draw_string(font,Vector2(1030,78),"DASH  "+("READY" if dash_unlocked else "LOCKED"),HORIZONTAL_ALIGNMENT_LEFT,-1,15,Color("#b7a6d8"))
     draw_string(font,Vector2(1030,99),"VORTEX  "+("READY" if skill_unlocked else "LOCKED"),HORIZONTAL_ALIGNMENT_LEFT,-1,15,Color("#b7a6d8"))
 
-    draw_circle(Vector2(100,635),55,Color(0.15,0.13,0.18,0.8))
-    draw_circle(Vector2(100,635),25,Color(0.30,0.26,0.36,0.8))
-    draw_circle(Vector2(1135,625),48,Color(0.30,0.16,0.28,0.9))
-    draw_string(font,Vector2(1100,634),"ATK",HORIZONTAL_ALIGNMENT_LEFT,-1,17,Color("#eee5d5"))
-    draw_circle(Vector2(1240,625),42,Color(0.20,0.24,0.35,0.9))
-    draw_string(font,Vector2(1212,634),"JMP",HORIZONTAL_ALIGNMENT_LEFT,-1,17,Color("#eee5d5"))
-    draw_circle(Vector2(1135,535),40,Color(0.25,0.18,0.35,0.9))
-    draw_string(font,Vector2(1100,542),"SKILL",HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("#eee5d5"))
+    draw_control_button(Rect2(32,575,96,96),"◀",touch_left)
+    draw_control_button(Rect2(140,575,96,96),"▶",touch_right)
+    draw_control_button(Rect2(1080,575,96,96),"⚔",attacking)
+    draw_control_button(Rect2(1180,575,68,68),"↑",false)
+    draw_control_button(Rect2(1075,485,100,72),"✦",skill_unlocked)
+    draw_string(font,Vector2(1090,555),"SKILL",HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color("#d8cce2"))
 
     if message_time > 0:
         var alpha: float = clampf(message_time,0.0,1.0)
         draw_rect(Rect2(280,125,720,58),Color(0.03,0.02,0.06,0.86*alpha))
         draw_string(bold_font,Vector2(320,162),message,HORIZONTAL_ALIGNMENT_CENTER,640,25,Color(0.93,0.88,0.78,alpha))
+
+func draw_control_button(rect: Rect2,label: String,active: bool) -> void:
+    draw_rect(rect,Color(0.01,0.008,0.02,0.72))
+    draw_rect(rect,Color(0.55,0.34,0.70,0.72 if active else 0.32),false,2)
+    if active:
+        draw_circle(rect.get_center(),min(rect.size.x,rect.size.y)*0.30,Color(0.52,0.22,0.72,0.16))
+    draw_string(bold_font,rect.position+Vector2(0,rect.size.y*0.64),label,HORIZONTAL_ALIGNMENT_CENTER,rect.size.x,28,Color("#f0e8db"))
 
 func draw_ninja(pos: Vector2, dir: float, scale_v: float) -> void:
     var s := scale_v
