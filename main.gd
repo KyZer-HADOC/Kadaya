@@ -235,7 +235,7 @@ func spawn_enemy(x: float, y: float, hp: int) -> void:
 
 func spawn_burst(pos: Vector2, count: int) -> void:
     for i in range(count):
-        var a := TAU * float(i) / max(count,1)
+        var a: float = TAU * float(i) / float(max(count,1))
         particles.append({"pos":pos,"vel":Vector2(cos(a),sin(a))*randf_range(80,280),"life":randf_range(0.25,0.55),"kind":"spark"})
 
 func update_particles(delta: float) -> void:
@@ -261,7 +261,7 @@ func draw_cinematic() -> void:
     for i in range(7):
         draw_rect(Rect2(i*210-30,480,160,110),Color("#0d0c14"))
         draw_colored_polygon(PackedVector2Array([Vector2(i*210-50,480),Vector2(i*210+50,410),Vector2(i*210+160,480)]),Color("#16131d"))
-    var a := clamp((cinematic_time-0.2)*1.8,0.0,1.0)
+    var a: float = clampf((cinematic_time-0.2)*1.8,0.0,1.0)
     if cinematic_time > 1.0: draw_ninja(Vector2(350,505),1.0,1.0)
     if cinematic_time > 2.0: draw_ninja(Vector2(500,505),-1.0,0.7)
     if cinematic_time > 3.0:
@@ -276,7 +276,7 @@ func draw_cinematic() -> void:
 func draw_title() -> void:
     draw_rect(Rect2(0,0,W,H),Color("#05040a"))
     for i in range(10):
-        var x := fmod(i*180.0+Time.get_ticks_msec()*0.02,W+250.0)-120.0
+        var x: float = fmod(float(i)*180.0+float(Time.get_ticks_msec())*0.02,W+250.0)-120.0
         draw_circle(Vector2(x,450+sin(Time.get_ticks_msec()*0.001+i)*35),95,Color(0.16,0.12,0.2,0.12))
     draw_ninja(Vector2(390,535),1.0,1.65)
     draw_string(bold_font,Vector2(585,270),"KADAYA",HORIZONTAL_ALIGNMENT_LEFT,-1,104,Color(0.93,0.88,0.78,title_alpha))
@@ -324,7 +324,7 @@ func draw_game() -> void:
     draw_string(font,Vector2(1100,542),"SKILL",HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("#eee5d5"))
 
     if message_time > 0:
-        var alpha := clamp(message_time,0,1)
+        var alpha: float = clampf(message_time,0.0,1.0)
         draw_rect(Rect2(280,125,720,58),Color(0.03,0.02,0.06,0.86*alpha))
         draw_string(bold_font,Vector2(320,162),message,HORIZONTAL_ALIGNMENT_CENTER,640,25,Color(0.93,0.88,0.78,alpha))
 
