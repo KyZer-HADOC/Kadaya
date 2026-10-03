@@ -356,17 +356,47 @@ func draw_cinematic() -> void:
         draw_string(font,Vector2(90,610),"A boy. A sealed power. A forgotten promise.",HORIZONTAL_ALIGNMENT_LEFT,-1,30,Color(0.92,0.86,0.76,a))
 
 func draw_title() -> void:
-    draw_rect(Rect2(0,0,W,H),Color("#05040a"))
-    draw_gradient_background()
-    if logo: draw_texture_rect(logo,Rect2(480,95,700,233),false)
-    for i in range(10):
-        var x: float = fmod(float(i)*180.0+float(Time.get_ticks_msec())*0.02,W+250.0)-120.0
-        draw_circle(Vector2(x,450+sin(Time.get_ticks_msec()*0.001+i)*35),95,Color(0.16,0.12,0.2,0.12))
-    draw_ninja(Vector2(390,535),1.0,1.65)
-    
-    
-    draw_string(font,Vector2(592,440),"TAP / PRESS ANY KEY TO BEGIN",HORIZONTAL_ALIGNMENT_LEFT,-1,22,Color(0.9,0.85,0.75,title_alpha))
-    draw_string(font,Vector2(592,500),"An original ninja adventure",HORIZONTAL_ALIGNMENT_LEFT,-1,18,Color(0.48,0.45,0.55,title_alpha))
+    draw_rect(Rect2(0,0,W,H),Color("#030308"))
+    draw_ultra_background()
+    var moon_pos := Vector2(1040,125)
+    draw_circle(moon_pos,82,Color(0.92,0.88,0.73,0.10))
+    draw_circle(moon_pos,60,Color("#ddd4b2"))
+    draw_circle(moon_pos + Vector2(17,-10),60,Color("#030308"))
+    draw_mountain_layer(0.82,Color("#080811"))
+    draw_mountain_layer(0.66,Color("#0d0c17"))
+    for i in range(28):
+        var x := fmod(float(i)*97.0 + ambient_time*(18.0 + float(i%4)*7.0),W+80.0)-40.0
+        var y := 100.0 + fmod(float(i)*53.0 + sin(ambient_time*0.8+i)*35.0,510.0)
+        draw_circle(Vector2(x,y),1.5+float(i%3)*0.8,Color(0.78,0.48,0.95,0.18))
+    draw_ninja(Vector2(355,545),1.0,1.85)
+    draw_circle(Vector2(360,485),170,Color(0.38,0.16,0.52,0.035))
+    draw_string(bold_font,Vector2(92,120),"KADAYA",HORIZONTAL_ALIGNMENT_LEFT,-1,92,Color("#eee7d7"))
+    draw_string(font,Vector2(98,154),"THE LAST SHADOW",HORIZONTAL_ALIGNMENT_LEFT,-1,20,Color("#a98bc4"))
+    draw_line(Vector2(98,174),Vector2(535,174),Color(0.65,0.40,0.85,0.45),2)
+    draw_string(font,Vector2(98,207),"AN ORIGINAL NINJA ACTION ADVENTURE",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color(0.68,0.64,0.72,0.8))
+    var rects := menu_button_rects()
+    for i in range(rects.size()):
+        draw_menu_button(rects[i],i,menu_hover == i)
+    draw_string(font,Vector2(760,620),"LANDSCAPE  •  60 FPS TARGET  •  ANDROID",HORIZONTAL_ALIGNMENT_LEFT,-1,13,Color(0.48,0.45,0.53,0.7))
+    if menu_message_time > 0.0:
+        draw_rect(Rect2(735,285,440,54),Color(0.02,0.01,0.04,0.94))
+        draw_rect(Rect2(735,285,440,54),Color(0.48,0.25,0.65,0.55),false,1.5)
+        draw_string(font,Vector2(755,320),menu_message,HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("#e5d9ef"))
+
+func draw_menu_button(rect: Rect2,idx: int,hovered: bool) -> void:
+    var pulse := 0.5 + sin(ambient_time*2.2)*0.5
+    var primary := idx == 0
+    var fill := Color(0.16,0.07,0.22,0.94) if primary else Color(0.035,0.03,0.06,0.94)
+    if hovered:
+        fill = Color(0.28,0.10,0.36,0.98)
+    draw_rect(rect,Color(0.0,0.0,0.0,0.45),false,8)
+    draw_rect(rect,fill)
+    draw_rect(rect,Color(0.70,0.42,0.88,0.72 if hovered or primary else 0.34),false,2)
+    if primary:
+        draw_line(rect.position+Vector2(24,rect.size.y-8),rect.position+Vector2(rect.size.x-24,rect.size.y-8),Color(0.92,0.66,1.0,0.55+0.25*pulse),3)
+    var labels := ["BEGIN CHAPTER 1","MISSIONS","ARMORY","SETTINGS"]
+    var sizes := [25,17,17,17]
+    draw_string(bold_font if primary else font,rect.position+Vector2(0,rect.size.y*0.63),labels[idx],HORIZONTAL_ALIGNMENT_CENTER,rect.size.x,sizes[idx],Color("#f2eadf"))
 
 func draw_gradient_background() -> void:
     for i in range(24):
