@@ -399,12 +399,31 @@ func draw_menu_button(rect: Rect2,idx: int,hovered: bool) -> void:
     draw_string(bold_font if primary else font,rect.position+Vector2(0,rect.size.y*0.63),labels[idx],HORIZONTAL_ALIGNMENT_CENTER,rect.size.x,sizes[idx],Color("#f2eadf"))
 
 func draw_gradient_background() -> void:
-    for i in range(24):
-        var t := float(i)/23.0
-        draw_rect(Rect2(0,t*H,W,H/23.0+2),Color(0.025+0.035*t,0.018+0.018*t,0.055+0.05*t,1))
-    for i in range(18):
-        var x := fmod(float(i)*103.0+float(Time.get_ticks_msec())*0.012,W+140.0)-70.0
-        draw_line(Vector2(x,80),Vector2(x+120,720),Color(0.55,0.35,0.8,0.025),2)
+    draw_ultra_background()
+
+func draw_ultra_background() -> void:
+    for i in range(32):
+        var t := float(i)/31.0
+        draw_rect(Rect2(0,t*H,W,H/31.0+2),Color(0.008+0.028*t,0.006+0.014*t,0.018+0.045*t,1))
+    for i in range(9):
+        var x := fmod(float(i)*175.0+ambient_time*(10.0+i),W+260.0)-130.0
+        var y := 235.0+float(i%3)*88.0
+        draw_circle(Vector2(x,y),120.0+float(i%4)*28.0,Color(0.30,0.20,0.40,0.025))
+    for i in range(55):
+        var x := fmod(float(i)*83.0+ambient_time*(90.0+float(i%5)*14.0),W+100.0)-50.0
+        var y := fmod(float(i)*47.0+ambient_time*150.0,H+80.0)-40.0
+        draw_line(Vector2(x,y),Vector2(x-10,y+26),Color(0.55,0.50,0.68,0.055),1)
+
+func draw_mountain_layer(parallax: float,color: Color) -> void:
+    var shift := fmod(ambient_time*7.0*parallax,260.0)
+    var pts := PackedVector2Array([
+        Vector2(-260+shift,510),Vector2(-100+shift,350),Vector2(30+shift,465),
+        Vector2(190+shift,290),Vector2(350+shift,470),Vector2(540+shift,330),
+        Vector2(710+shift,475),Vector2(900+shift,300),Vector2(1080+shift,465),
+        Vector2(1260+shift,330),Vector2(1510+shift,510),Vector2(1510+shift,650),
+        Vector2(-260+shift,650)
+    ])
+    draw_colored_polygon(pts,color)
 
 func draw_game() -> void:
     draw_gradient_background()
