@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="300" viewBox="0 0 900 300">
+<defs>
+ <linearGradient id="g" x1="0" x2="1"><stop stop-color="#e9d9b8"/><stop offset=".45" stop-color="#a97cff"/><stop offset="1" stop-color="#ff496f"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="900" height="300" fill="none"/>
+<g filter="url(#glow)">
+<path d="M120 218c30-75 80-122 152-141-12 40-7 77 14 111-47-14-89-4-126 30z" fill="#171323" stroke="#a97cff" stroke-width="6"/>
+<path d="M173 126c45-38 83-48 118-48-26 20-39 46-42 77-25-17-50-25-76-29z" fill="#e9d9b8"/>
+<path d="M219 124l49-21" stroke="#14111c" stroke-width="12" stroke-linecap="round"/>
+<circle cx="252" cy="119" r="6" fill="#ff496f"/>
+</g>
+<text x="330" y="174" font-family="sans-serif" font-size="116" font-weight="900" letter-spacing="7" fill="url(#g)">KADAYA</text>
+<text x="338" y="214" font-family="sans-serif" font-size="25" letter-spacing="12" fill="#d4cadf">THE LAST SHADOW</text>
+</svg>
