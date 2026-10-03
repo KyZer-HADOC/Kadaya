@@ -37,6 +37,10 @@ var music: AudioStreamPlayer
 var music_player: AudioStreamGeneratorPlayback
 var music_phase := 0.0
 var voice_started := false
+var menu_hover := -1
+var menu_message := ""
+var menu_message_time := 0.0
+var ambient_time := 0.0
 
 func _ready() -> void:
     font = ThemeDB.fallback_font
@@ -46,6 +50,9 @@ func _ready() -> void:
     queue_redraw()
 
 func _process(delta: float) -> void:
+    ambient_time += delta
+    if menu_message_time > 0.0:
+        menu_message_time -= delta
     if state == "cinematic":
         cinematic_time += delta
         update_music(delta)
@@ -70,7 +77,8 @@ func _input(event: InputEvent) -> void:
             state = "title"
             return
         if state == "title":
-            start_game()
+            if event.keycode == KEY_ENTER or event.keycode == KEY_SPACE:
+                start_game()
             return
         if event.keycode == KEY_SPACE:
             do_jump()
@@ -84,13 +92,46 @@ func _input(event: InputEvent) -> void:
                 state = "title"
                 return
             if state == "title":
-                start_game()
+                handle_menu_touch(event.position)
                 return
             handle_touch(event.position, true)
         else:
             handle_touch(event.position, false)
+    if event is InputEventMouseMotion and state == "title":
+        menu_hover = get_menu_button_at(event.position)
+        queue_redraw()
     if event is InputEventMouseButton and event.pressed and state == "title":
+        handle_menu_touch(event.position)
+
+func menu_button_rects() -> Array:
+    return [
+        Rect2(760, 370, 390, 68),
+        Rect2(760, 450, 185, 58),
+        Rect2(965, 450, 185, 58),
+        Rect2(760, 520, 390, 58)
+    ]
+
+func get_menu_button_at(p: Vector2) -> int:
+    var rects := menu_button_rects()
+    for i in range(rects.size()):
+        if rects[i].has_point(p):
+            return i
+    return -1
+
+func handle_menu_touch(p: Vector2) -> void:
+    var idx := get_menu_button_at(p)
+    if idx == 0:
         start_game()
+    elif idx == 1:
+        menu_message = "MISSIONS  •  CHAPTER 1 COMING"
+        menu_message_time = 2.0
+    elif idx == 2:
+        menu_message = "ARMORY  •  KADAYA'S GEAR"
+        menu_message_time = 2.0
+    elif idx == 3:
+        menu_message = "SETTINGS  •  AUDIO / VIBRATION"
+        menu_message_time = 2.0
+    queue_redraw()
 
 func handle_touch(p: Vector2, pressed: bool) -> void:
     if p.y < 500:
