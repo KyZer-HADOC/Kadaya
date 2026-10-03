@@ -45,7 +45,10 @@ var ambient_time := 0.0
 func _ready() -> void:
     font = ThemeDB.fallback_font
     bold_font = ThemeDB.fallback_font
-    logo = load("res://logo.svg")
+    queue_redraw()
+    call_deferred("_boot_audio")
+
+func _boot_audio() -> void:
     setup_music()
     queue_redraw()
 
@@ -154,6 +157,8 @@ func speak_intro() -> void:
         if state == "cinematic": DisplayServer.tts_speak("The last shadow.", "", 0.85, 0.95, 0.82)
 
 func setup_music() -> void:
+    if music != null:
+        return
     music = AudioStreamPlayer.new()
     var stream := AudioStreamGenerator.new()
     stream.mix_rate = 44100.0
@@ -328,10 +333,16 @@ func update_particles(delta: float) -> void:
     particles = particles.filter(func(p): return p.life > 0)
 
 func _draw() -> void:
-    if state == "cinematic": draw_cinematic()
-    elif state == "title": draw_title()
-    else: draw_game()
-    if flash > 0: draw_rect(Rect2(0,0,W,H),Color(1,1,1,flash*2.5))
+    draw_rect(Rect2(0, 0, W, H), Color("#030308"))
+    draw_rect(Rect2(0, 0, W, 5), Color("#8c4db5"))
+    if state == "cinematic":
+        draw_cinematic()
+    elif state == "title":
+        draw_title()
+    else:
+        draw_game()
+    if flash > 0:
+        draw_rect(Rect2(0,0,W,H),Color(1,1,1,flash*2.5))
 
 func draw_cinematic() -> void:
     draw_rect(Rect2(0,0,W,H),Color("#07060d"))
