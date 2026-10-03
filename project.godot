@@ -22,7 +22,7 @@ textures/default_filters/use_nearest_mipmap_filter=false
 
 [export_presets]
 
-[[export_presets]]
+[preset.0]
 name="Android"
 platform="Android"
 runnable=true
