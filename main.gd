@@ -32,16 +32,27 @@ var touch_right := false
 
 var font: Font
 var bold_font: Font
+var logo: Texture2D
+var music: AudioStreamPlayer
+var music_player: AudioStreamGeneratorPlayback
+var music_phase := 0.0
+var voice_started := false
 
 func _ready() -> void:
     font = ThemeDB.fallback_font
     bold_font = ThemeDB.fallback_font
+    logo = load("res://logo.svg")
+    setup_music()
     queue_redraw()
 
 func _process(delta: float) -> void:
     if state == "cinematic":
         cinematic_time += delta
-        if cinematic_time > 8.0:
+        update_music(delta)
+        if not voice_started and cinematic_time > 0.45:
+            voice_started = true
+            speak_intro()
+        if cinematic_time > 8.5:
             state = "title"
         queue_redraw()
         return
@@ -94,6 +105,36 @@ func handle_touch(p: Vector2, pressed: bool) -> void:
         if pressed: do_jump()
     elif p.x > 1080 and p.y > 480 and p.y <= 575:
         if pressed: use_ability()
+
+func speak_intro() -> void:
+    if DisplayServer.has_feature(DisplayServer.FEATURE_TEXT_TO_SPEECH):
+        DisplayServer.tts_speak("K... A... D... A... Y... A...", "", 0.95, 0.9, 0.72)
+        await get_tree().create_timer(2.2).timeout
+        if state == "cinematic": DisplayServer.tts_speak("The last shadow.", "", 0.85, 0.95, 0.82)
+
+func setup_music() -> void:
+    music = AudioStreamPlayer.new()
+    var stream := AudioStreamGenerator.new()
+    stream.mix_rate = 44100.0
+    stream.buffer_length = 2.5
+    music.stream = stream
+    music.volume_db = -10.0
+    add_child(music)
+    music.play()
+    music_player = music.get_stream_playback()
+    update_music(0.01)
+
+func update_music(delta: float) -> void:
+    if music_player == null: return
+    var samples := int(44100.0 * delta)
+    var notes := [55.0, 65.41, 73.42, 82.41, 98.0, 82.41, 73.42, 65.41]
+    for i in range(samples):
+        music_phase += 1.0 / 44100.0
+        var n := notes[int(floor(music_phase * 2.0)) % notes.size()]
+        var bass := sin(TAU * n * 0.5 * music_phase) * 0.055
+        var pad := sin(TAU * n * music_phase) * 0.025
+        var pulse := sin(TAU * 2.0 * music_phase) * 0.008
+        music_player.push_frame(Vector2(bass + pad + pulse, bass + pad + pulse))
 
 func start_game() -> void:
     state = "game"
@@ -275,17 +316,27 @@ func draw_cinematic() -> void:
 
 func draw_title() -> void:
     draw_rect(Rect2(0,0,W,H),Color("#05040a"))
+    draw_gradient_background()
+    if logo: draw_texture_rect(logo,Rect2(480,95,700,233),false)
     for i in range(10):
         var x: float = fmod(float(i)*180.0+float(Time.get_ticks_msec())*0.02,W+250.0)-120.0
         draw_circle(Vector2(x,450+sin(Time.get_ticks_msec()*0.001+i)*35),95,Color(0.16,0.12,0.2,0.12))
     draw_ninja(Vector2(390,535),1.0,1.65)
-    draw_string(bold_font,Vector2(585,270),"KADAYA",HORIZONTAL_ALIGNMENT_LEFT,-1,104,Color(0.93,0.88,0.78,title_alpha))
-    draw_string(font,Vector2(592,320),"THE LAST SHADOW",HORIZONTAL_ALIGNMENT_LEFT,-1,24,Color(0.65,0.58,0.72,title_alpha))
+    
+    
     draw_string(font,Vector2(592,440),"TAP / PRESS ANY KEY TO BEGIN",HORIZONTAL_ALIGNMENT_LEFT,-1,22,Color(0.9,0.85,0.75,title_alpha))
     draw_string(font,Vector2(592,500),"An original ninja adventure",HORIZONTAL_ALIGNMENT_LEFT,-1,18,Color(0.48,0.45,0.55,title_alpha))
 
+func draw_gradient_background() -> void:
+    for i in range(24):
+        var t := float(i)/23.0
+        draw_rect(Rect2(0,t*H,W,H/23.0+2),Color(0.025+0.035*t,0.018+0.018*t,0.055+0.05*t,1))
+    for i in range(18):
+        var x := fmod(float(i)*103.0+float(Time.get_ticks_msec())*0.012,W+140.0)-70.0
+        draw_line(Vector2(x,80),Vector2(x+120,720),Color(0.55,0.35,0.8,0.025),2)
+
 func draw_game() -> void:
-    draw_rect(Rect2(0,0,W,H),Color("#090812"))
+    draw_gradient_background()
     for i in range(7):
         var yy := 80.0+i*70.0
         draw_line(Vector2(0,yy),Vector2(W,yy+30),Color(0.25,0.18,0.28,0.10),2)
