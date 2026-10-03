@@ -1,11 +1,11 @@
-; Kadaya - original 2D ninja action platformer
+; Kadaya — Android landscape, high-fidelity 2D action prototype
 config_version=5
 
 [application]
 config/name="Kadaya"
 run/main_scene="res://Main.tscn"
-config/features=PackedStringArray("4.3", "GL Compatibility")
-boot_splash/bg_color=Color(0.015, 0.012, 0.025, 1)
+config/features=PackedStringArray("4.7", "GL Compatibility")
+boot_splash/bg_color=Color(0.008, 0.006, 0.015, 1)
 
 [display]
 window/size/viewport_width=1280
@@ -16,10 +16,13 @@ window/stretch/mode="canvas_items"
 window/handheld/orientation=1
 
 [rendering]
-textures/vram_compression/import_etc2_astc=true
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/default_filters/use_nearest_mipmap_filter=false
+textures/vram_compression/import_etc2_astc=true
+
+[gui]
+theme/default_font_multichannel_signed_distance_field=true
 
 [export_presets]
 
@@ -27,6 +30,7 @@ textures/default_filters/use_nearest_mipmap_filter=false
 name="Android"
 platform="Android"
 runnable=true
+dedicated_server=false
 custom_features=""
 export_filter="all_resources"
 include_filter=""
@@ -37,3 +41,12 @@ encryption_include_filters=""
 encryption_exclude_filters=""
 encrypt_pck=false
 encrypt_directory=false
+
+[preset.0.options]
+screen/orientation=1
+screen/immersive_mode=true
+screen/edge_to_edge=true
+architectures/armeabi-v7a=false
+architectures/arm64-v8a=true
+architectures/x86=false
+architectures/x86_64=false
