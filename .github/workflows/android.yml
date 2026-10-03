@@ -13,18 +13,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Godot
+
+      - name: Setup Godot 4.7.2
         uses: chickensoft-games/setup-godot@v2
         with:
-          version: "4.3.1"
+          version: "4.7.2"
           use-dotnet: false
           include-templates: true
-      - name: Import project
+
+      - name: Validate project
         run: godot --headless --editor --quit
+
       - name: Build Android APK
         run: |
           mkdir -p export
           godot --headless --path . --export-debug "Android" export/Kadaya-debug.apk
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
