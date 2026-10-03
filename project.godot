@@ -20,9 +20,19 @@ renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/default_filters/use_nearest_mipmap_filter=false
 
-[input]
-left={"deadzone":0.2,"events":[Object(InputEventKey,"physical_keycode":65),Object(InputEventKey,"physical_keycode":4194311)]}
-right={"deadzone":0.2,"events":[Object(InputEventKey,"physical_keycode":68),Object(InputEventKey,"physical_keycode":4194313)]}
-jump={"deadzone":0.2,"events":[Object(InputEventKey,"physical_keycode":32)]}
-attack={"deadzone":0.2,"events":[Object(InputEventMouseButton,"button_index":1)]}
-skill={"deadzone":0.2,"events":[Object(InputEventKey,"physical_keycode":81)]}
+[export_presets]
+
+[[export_presets]]
+name="Android"
+platform="Android"
+runnable=true
+custom_features=""
+export_filter="all_resources"
+include_filter=""
+exclude_filter=""
+export_path="export/Kadaya-debug.apk"
+patch_list=Array[String]([])
+encryption_include_filters=""
+encryption_exclude_filters=""
+encrypt_pck=false
+encrypt_directory=false
