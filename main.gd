@@ -8,7 +8,7 @@ const H := 720.0
 const GROUND_Y := 590.0
 const GRAVITY := 1800.0
 
-var state := "cinematic"
+var state := "title"
 var cinematic_time := 0.0
 var title_alpha := 0.0
 var player := Vector2(170, GROUND_Y - 76)
@@ -46,7 +46,7 @@ func _ready() -> void:
     font = ThemeDB.fallback_font
     bold_font = ThemeDB.fallback_font
     queue_redraw()
-    call_deferred("_boot_audio")
+    # Audio starts only after the first stable frame; gameplay must never depend on audio initialization.
 
 func _boot_audio() -> void:
     setup_music()
@@ -58,7 +58,8 @@ func _process(delta: float) -> void:
         menu_message_time -= delta
     if state == "cinematic":
         cinematic_time += delta
-        update_music(delta)
+        if music_player != null:
+            update_music(delta)
         if not voice_started and cinematic_time > 0.45:
             voice_started = true
             speak_intro()
