@@ -15,4 +15,4 @@ PlayerSettings:
   AndroidBundleVersionCode: 2
   AndroidMinSdkVersion: 23
   AndroidTargetSdkVersion: 35
-  activeInputHandler: 1
+  activeInputHandler: 2
