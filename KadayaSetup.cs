@@ -59,12 +59,29 @@ public static class KadayaSetup
             AssetDatabase.CreateAsset(rd, Dir + "/Kadaya_Renderer.asset");
             rp = UniversalRenderPipelineAsset.Create(rd);
             rp.supportsHDR = true;
-            rp.msaaSampleCount = 4;
-            rp.shadowDistance = 45f;
+            rp.msaaSampleCount = 8;
+            rp.shadowDistance = 80f;
+            rp.shadowCascadeCount = 4;
+            rp.renderScale = 1f;
+            rp.supportsCameraDepthTexture = true;
+            rp.supportsCameraOpaqueTexture = false;
             AssetDatabase.CreateAsset(rp, rpPath);
         }
 
         GraphicsSettings.defaultRenderPipeline = rp;
+
+        // Ultra-quality defaults for this project.
+        QualitySettings.antiAliasing = 8;
+        QualitySettings.shadows = ShadowQuality.All;
+        QualitySettings.shadowDistance = 80f;
+        QualitySettings.shadowResolution = ShadowResolution.VeryHigh;
+        QualitySettings.vSyncCount = 0;
+        QualitySettings.masterTextureLimit = 0;
+        QualitySettings.anisotropicFiltering = AnisotropicFiltering.ForceEnable;
+        QualitySettings.lodBias = 1.5f;
+        QualitySettings.skinWeights = SkinWeights.FourBones;
+        QualitySettings.maxQueuedFrames = 2;
+
         int prev = QualitySettings.GetQualityLevel();
         for (int i = 0; i < QualitySettings.names.Length; i++)
         {
@@ -75,7 +92,7 @@ public static class KadayaSetup
 
         AddShaders();
         AssetDatabase.SaveAssets();
-        Debug.Log("[KADAYA] URP graphics set up. Press Play!");
+        Debug.Log("[KADAYA] URP graphics upgraded for ultra-quality output. Press Play!");
     }
 
     static void AddShaders()
